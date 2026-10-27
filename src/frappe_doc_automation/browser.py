@@ -31,18 +31,22 @@ def capture(config: Path, output: Path, storage_state: Path) -> list[Path]:
             if not re.fullmatch(r"[a-zA-Z0-9_-]+", name):
                 raise ValueError(f"Invalid screenshot name: {name}")
             url = base + path
-            response = page.goto(url, wait_until="domcontentloaded", timeout=30000)
-            page.wait_for_load_state("networkidle", timeout=15000)
-            if urlparse(page.url).hostname != parsed.hostname or "/login" in urlparse(page.url).path.lower():
-                raise RuntimeError(f"Authentication or host validation failed for {path}")
-            if response and response.status >= 400:
-                raise RuntimeError(f"Page returned HTTP {response.status}: {path}")
-            if page.locator("text=Insufficient Permission").count() or page.locator("text=Not Permitted").count():
-                raise RuntimeError(f"Permissions denied: {path}")
-            for css in settings.get("redact_selectors", []):
-                page.locator(css).evaluate_all("els => els.forEach(el => el.style.visibility = 'hidden')")
-            outfile = output / (name + ".png")
-            page.screenshot(path=str(outfile), full_page=True, animations="disabled")
-            outputs.append(outfile)
+            try:
+                response = page.goto(url, wait_until="domcontentloaded", timeout=30000)
+                page.wait_for_load_state("networkidle", timeout=15000)
+                if urlparse(page.url).hostname != parsed.hostname or "/login" in urlparse(page.url).path.lower():
+                    raise RuntimeError(f"Authentication or host validation failed for {path}")
+                if response and response.status >= 400:
+                    raise RuntimeError(f"Page returned HTTP {response.status}: {path}")
+                if page.locator("text=Insufficient Permission").count() or page.locator("text=Not Permitted").count():
+                    raise RuntimeError(f"Permissions denied: {path}")
+                for css in settings.get("redact_selectors", []):
+                    page.locator(css).evaluate_all("els => els.forEach(el => el.style.visibility = 'hidden')")
+                outfile = output / (name + ".png")
+                page.screenshot(path=str(outfile), full_page=True, animations="disabled")
+                outputs.append(outfile)
+            except Exception:
+                if not settings.get("allow_failure", False):
+                    raise
         browser.close()
     return outputs
