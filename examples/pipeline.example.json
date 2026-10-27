@@ -1,0 +1,10 @@
+{
+  "base_url": "https://staging.example.com",
+  "max_pages": 40,
+  "redact_selectors": [".navbar .avatar"],
+  "roles": [
+    {"name": "Manager", "storage_state": "/secure/manager-state.json"},
+    {"name": "Standard User", "storage_state": "/secure/user-state.json"}
+  ],
+  "target_repo": "Aakvatech-Limited/av_rsvp"
+}
