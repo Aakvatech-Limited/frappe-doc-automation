@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "frappe-doc-automation"
-version = "0.1.0"
+version = "0.2.0"
 description = "Evidence-backed documentation and screenshot automation for Frappe apps"
 requires-python = ">=3.10"
 dependencies = []
@@ -12,6 +12,7 @@ dependencies = []
 [project.optional-dependencies]
 browser = ["playwright>=1.45,<2"]
 test = ["pytest>=8"]
+site = ["mkdocs-material>=9,<10"]
 
 [project.scripts]
 frappe-docs = "frappe_doc_automation.cli:main"
