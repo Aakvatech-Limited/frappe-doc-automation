@@ -77,4 +77,4 @@ def publish(output: Path, settings: dict) -> None:
         subprocess.run(["git", "-C", str(working), "push", "-u", "origin", branch], check=True)
         subprocess.run(["gh", "pr", "create", "-R", target, "--head", branch,
                         "--title", "docs: refresh Frappe application guide",
-                        "--body", "Generated documentation. Review screenshots and AI drafts before merge."], check=True)
+                        "--draft", "--body", "Generated documentation. Review screenshots and AI drafts before merge."], check=True)
