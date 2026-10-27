@@ -1,0 +1,8 @@
+{
+  "base_url": "https://staging.example.com",
+  "screens": [
+    {"name": "workspace", "path": "/app"},
+    {"name": "sales-order-list", "path": "/app/sales-order"}
+  ],
+  "redact_selectors": [".navbar .avatar"]
+}
